@@ -49,7 +49,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background-color: red;
+            background-color: black; /* 기본 원 색깔을 검정색으로 설정 */
             margin: 10px;
             display: inline-block;
             opacity: 0.7;
@@ -146,14 +146,14 @@
         const circles = document.querySelectorAll('.circle');
         const randomIndex = Math.floor(Math.random() * circles.length);
         const randomCircle = circles[randomIndex];
-        randomCircle.style.backgroundColor = 'black';  // 원 색깔을 검정색으로 변경
+        randomCircle.style.backgroundColor = 'red';  // 원 색깔을 빨간색으로 변경
         randomCircle.style.opacity = '1';  // 원을 완전히 보이게 함
 
         startTime = Date.now();
         
         // 1초 후 원을 원래대로 돌려놓음
         setTimeout(() => {
-            randomCircle.style.backgroundColor = 'red';  // 원 색깔을 빨간색으로 변경
+            randomCircle.style.backgroundColor = 'black';  // 원 색깔을 검정색으로 변경
             randomCircle.style.opacity = '0.7';  // 원을 다시 투명하게
             currentRound++;
             showRandomCircle();  // 다음 원을 나타냄
