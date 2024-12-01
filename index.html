@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Reaction Time Test</title>
-    <link rel="icon" type="image/png" href="파비콘 이미지 URL">
+    <title>Reaction Time Test Game</title>
+    <link rel="icon" type="image/png" href="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbbqJdy%2FbtszAY8E0nn%2F2ces7gFBw4k8siK5xJxOb0%2Fimg.png">
+    
     <style>
-        /* 기본 레이아웃 설정 */
+        /* 전체 레이아웃 설정 */
         body {
             display: flex;
             flex-direction: column;
@@ -22,28 +23,11 @@
         }
 
         h3 {
-            font-size: 1em;
-            color: gray;
+            font-size: 1.2em;
             text-align: center;
         }
 
-        /* 원 스타일 */
-        .circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid black;
-            margin: 10px;
-            background-color: black;
-        }
-
-        /* 게임 결과 스타일 */
-        #result {
-            font-size: 1.5em;
-            margin-top: 20px;
-        }
-
-        /* 돌아가기 버튼 스타일 */
+        /* 버튼 스타일 */
         button {
             font-size: 20px;
             padding: 15px 30px;
@@ -60,140 +44,163 @@
             background-color: #45a049;
         }
 
-        /* 쿠키 얼굴 이미지 스타일 */
-        #cookieImage {
-            width: 90px;
-            margin-bottom: 20px;
+        /* 원 스타일 */
+        .circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: red;
+            margin: 10px;
+            display: inline-block;
+            opacity: 0.7;
         }
 
-        /* 작은 글씨 */
-        .small-text {
-            font-size: 0.9em;
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 300px;
+        }
+
+        /* 게임 결과 스타일 */
+        #result {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        #backButton {
+            display: none;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        #gameName {
+            font-size: 0.8em;
             color: gray;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <!-- 쿠키 얼굴 이미지 추가 -->
-    <a href="index.html"><img id="cookieImage" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbbqJdy%2FbtszAY8E0nn%2F2ces7gFBw4k8siK5xJxOb0%2Fimg.png" alt="쿠키 얼굴"></a>
 
-    <h1>Reaction Time Test</h1>
-    <h3 class="small-text">by.shp98</h3>
-    <hr>
+<!-- 홈 아이콘 -->
+<a href="index.html"><img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbbqJdy%2FbtszAY8E0nn%2F2ces7gFBw4k8siK5xJxOb0%2Fimg.png" width="90px"></a>
 
-    <!-- 원들 배치 -->
-    <div id="gameBoard" style="display: grid; grid-template-columns: repeat(3, 120px); gap: 10px;">
-        <div class="circle" id="circle1" onclick="clickCircle(1)"></div>
-        <div class="circle" id="circle2" onclick="clickCircle(2)"></div>
-        <div class="circle" id="circle3" onclick="clickCircle(3)"></div>
-        <div class="circle" id="circle4" onclick="clickCircle(4)"></div>
-        <div class="circle" id="circle5" onclick="clickCircle(5)"></div>
-        <div class="circle" id="circle6" onclick="clickCircle(6)"></div>
-        <div class="circle" id="circle7" onclick="clickCircle(7)"></div>
-        <div class="circle" id="circle8" onclick="clickCircle(8)"></div>
-        <div class="circle" id="circle9" onclick="clickCircle(9)"></div>
-    </div>
+<h1>Reaction Time Test Game</h1>
+<h3><a href="https://goodstock18.tistory.com/m/entry/Bookmark-Collection">by.shp98</a></h3>
+<hr>
 
-    <!-- 게임 결과 표시 -->
-    <div id="result"></div>
+<!-- 게임 시작 버튼 -->
+<button onclick="startGame()">Start Game</button>
 
-    <!-- 다시 도전하기 버튼 -->
-    <button id="backButton" style="display: none;" onclick="location.reload();">Try Again / 다시 도전하기</button>
+<!-- 원을 표시하는 컨테이너 -->
+<div class="container" id="circleContainer">
+    <!-- 원들이 여기에 동적으로 삽입됩니다 -->
+</div>
 
-    <script>
-        let clickCount = 0;
-        let totalTime = 0;
-        let gameInterval;
-        let currentCircle;
-        let startTime;
-        let clickTimes = [];
-        const totalRounds = 10; // 게임 횟수 설정
-        const maxTime = 7; // 게임 시간 설정 (초)
+<!-- 게임 결과 -->
+<div id="result"></div>
 
-        // 원 클릭 처리
-        function clickCircle(circleId) {
-            if (currentCircle === circleId) {
-                let endTime = new Date().getTime();
-                let reactionTime = (endTime - startTime) / 1000; // 초 단위로 계산
-                clickTimes.push(reactionTime);
-            }
-            if (clickCount >= totalRounds) {
-                endGame();
-            }
+<!-- 다시 도전하기 버튼 -->
+<button id="backButton" onclick="restartGame()">Try Again</button>
+
+<!-- 게임 이름 표시 -->
+<div id="gameName">Reaction Time Test</div>
+
+<script>
+    let gameInterval;
+    let currentRound = 0;
+    const totalRounds = 10;  // 게임 진행 횟수
+    let clickTimes = [];
+    let startTime;
+    
+    function startGame() {
+        currentRound = 0;
+        clickTimes = [];
+        document.getElementById("backButton").style.display = 'none';
+        document.getElementById("result").innerHTML = '';
+        generateCircles();
+        showRandomCircle();
+    }
+    
+    // 원을 생성하는 함수
+    function generateCircles() {
+        const container = document.getElementById("circleContainer");
+        container.innerHTML = '';
+        for (let i = 0; i < 9; i++) {
+            let circle = document.createElement('div');
+            circle.classList.add('circle');
+            circle.addEventListener('click', handleClick);
+            container.appendChild(circle);
+        }
+    }
+
+    // 랜덤 원을 표시하는 함수
+    function showRandomCircle() {
+        if (currentRound >= totalRounds) {
+            endGame();
+            return;
         }
 
-        // 원이 랜덤으로 깜빡이는 함수 (시간을 더 랜덤화)
-        function showRandomCircle() {
-            // 모든 원을 검정색으로 설정
-            for (let i = 1; i <= 9; i++) {
-                document.getElementById('circle' + i).style.backgroundColor = 'black';
-            }
+        const circles = document.querySelectorAll('.circle');
+        const randomIndex = Math.floor(Math.random() * circles.length);
+        const randomCircle = circles[randomIndex];
+        randomCircle.style.backgroundColor = 'black';  // 원 색깔을 검정색으로 변경
+        randomCircle.style.opacity = '1';  // 원을 완전히 보이게 함
 
-            // 랜덤 원 깜빡이기
-            const randomCircle = Math.floor(Math.random() * 9) + 1;
-            document.getElementById('circle' + randomCircle).style.backgroundColor = 'red';
+        startTime = Date.now();
+        
+        // 1초 후 원을 원래대로 돌려놓음
+        setTimeout(() => {
+            randomCircle.style.backgroundColor = 'red';  // 원 색깔을 빨간색으로 변경
+            randomCircle.style.opacity = '0.7';  // 원을 다시 투명하게
+            currentRound++;
+            showRandomCircle();  // 다음 원을 나타냄
+        }, 1000);
+    }
 
-            currentCircle = randomCircle;
-            startTime = new Date().getTime(); // 원이 깜빡인 시간 기록
+    // 클릭 이벤트 핸들러
+    function handleClick(event) {
+        const reactionTime = (Date.now() - startTime) / 1000;
+        clickTimes.push(reactionTime);
+    }
+
+    // 게임 종료 처리 함수
+    function endGame() {
+        let totalReactionTime = clickTimes.reduce((sum, time) => sum + time, 0);
+        let averageTime = totalReactionTime / totalRounds;
+
+        // 기준 시간에 따른 티어 부여 (난이도 2배 어려움)
+        let tier = '';
+        if (averageTime <= 0.005) {
+            tier = 'Grand Master';
+        } else if (averageTime <= 0.025) {
+            tier = 'Master';
+        } else if (averageTime <= 0.05) {
+            tier = 'Diamond';
+        } else if (averageTime <= 0.1) {
+            tier = 'Platinum';
+        } else if (averageTime <= 0.15) {
+            tier = 'Gold';
+        } else if (averageTime <= 0.2) {
+            tier = 'Silver';
+        } else {
+            tier = 'Bronze';
         }
 
-        // 게임 시작 함수
-        function startGame() {
-            totalTime = maxTime;
-            clickCount = 0;
-            document.getElementById('result').textContent = '';
-            document.getElementById('backButton').style.display = 'none';
-            clickTimes = [];
+        // 게임 결과 표시
+        document.getElementById('result').innerHTML = `Your average reaction time: ${averageTime.toFixed(6)}s<br>Your tier: ${tier}`;
 
-            gameInterval = setInterval(function() {
-                totalTime--;
-                if (totalTime <= 0) {
-                    clearInterval(gameInterval);
-                    endGame();
-                } else {
-                    showRandomCircle();
-                }
-            }, Math.random() * 700 + 500); // 랜덤한 시간 간격으로 깜빡이기
+        // 다시 도전하기 버튼 표시
+        document.getElementById('backButton').style.display = 'block';
+    }
 
-            setTimeout(() => {
-                clearInterval(gameInterval);
-                endGame();
-            }, maxTime * 1000);
-        }
-
-        // 게임 종료 처리 함수
-        function endGame() {
-            clearInterval(gameInterval);
-            let totalReactionTime = clickTimes.reduce((sum, time) => sum + time, 0);
-            let averageTime = totalReactionTime / totalRounds;
-
-            // 기준 시간에 따른 티어 부여
-            let tier = '';
-            if (averageTime <= 0.01) {
-                tier = 'Grand Master';
-            } else if (averageTime <= 0.05) {
-                tier = 'Master';
-            } else if (averageTime <= 0.1) {
-                tier = 'Diamond';
-            } else if (averageTime <= 0.2) {
-                tier = 'Platinum';
-            } else if (averageTime <= 0.3) {
-                tier = 'Gold';
-            } else if (averageTime <= 0.4) {
-                tier = 'Silver';
-            } else {
-                tier = 'Bronze';
-            }
-
-            // 게임 결과 표시
-            document.getElementById('result').innerHTML = `Your average reaction time: ${averageTime.toFixed(3)}s<br>Your tier: ${tier}`;
-
-            // 다시 도전하기 버튼 표시
-            document.getElementById('backButton').style.display = 'block';
-        }
-
-        // 게임 시작
+    // 게임 리스타트 함수
+    function restartGame() {
         startGame();
-    </script>
+    }
+</script>
+
 </body>
 </html>
