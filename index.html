@@ -43,14 +43,6 @@
             margin-top: 20px;
         }
 
-        /* 티어 기준표 스타일 */
-        .tier-table {
-            margin-top: 20px;
-            font-size: 1em;
-            color: gray;
-            text-align: center;
-        }
-
         /* 돌아가기 버튼 스타일 */
         button {
             font-size: 20px;
@@ -104,49 +96,6 @@
 
     <!-- 게임 결과 표시 -->
     <div id="result"></div>
-
-    <!-- 티어 기준표 -->
-    <div class="tier-table">
-        <h3>Tier Criteria</h3>
-        <table style="width: 100%; border: 1px solid #ddd; margin-top: 10px;">
-            <thead>
-                <tr>
-                    <th>Tier</th>
-                    <th>Average Reaction Time (s)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Grand Master</td>
-                    <td>≤ 0.01</td>
-                </tr>
-                <tr>
-                    <td>Master</td>
-                    <td>≤ 0.05</td>
-                </tr>
-                <tr>
-                    <td>Diamond</td>
-                    <td>≤ 0.1</td>
-                </tr>
-                <tr>
-                    <td>Platinum</td>
-                    <td>≤ 0.2</td>
-                </tr>
-                <tr>
-                    <td>Gold</td>
-                    <td>≤ 0.3</td>
-                </tr>
-                <tr>
-                    <td>Silver</td>
-                    <td>≤ 0.4</td>
-                </tr>
-                <tr>
-                    <td>Bronze</td>
-                    <td>＞ 0.4</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 
     <!-- 다시 도전하기 버튼 -->
     <button id="backButton" style="display: none;" onclick="location.reload();">Try Again / 다시 도전하기</button>
@@ -225,3 +174,26 @@
             } else if (averageTime <= 0.05) {
                 tier = 'Master';
             } else if (averageTime <= 0.1) {
+                tier = 'Diamond';
+            } else if (averageTime <= 0.2) {
+                tier = 'Platinum';
+            } else if (averageTime <= 0.3) {
+                tier = 'Gold';
+            } else if (averageTime <= 0.4) {
+                tier = 'Silver';
+            } else {
+                tier = 'Bronze';
+            }
+
+            // 게임 결과 표시
+            document.getElementById('result').innerHTML = `Your average reaction time: ${averageTime.toFixed(3)}s<br>Your tier: ${tier}`;
+
+            // 다시 도전하기 버튼 표시
+            document.getElementById('backButton').style.display = 'block';
+        }
+
+        // 게임 시작
+        startGame();
+    </script>
+</body>
+</html>
