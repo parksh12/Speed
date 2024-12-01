@@ -49,7 +49,6 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background-color: black; /* 기본 원 색깔을 검정색으로 설정 */
             margin: 10px;
             display: inline-block;
             opacity: 0.7;
@@ -157,7 +156,7 @@
         document.getElementById("backButton").style.display = 'none';
         document.getElementById("result").innerHTML = '';
         generateCircles();
-        showRandomCircle();
+        showRandomCircles();
     }
 
     // 원을 생성하는 함수
@@ -172,33 +171,41 @@
         }
     }
 
-    // 랜덤 원을 표시하는 함수
-    function showRandomCircle() {
+    // 랜덤 원을 두 개 표시하는 함수 (게임 시작 시 두 개의 원이 나타남)
+    function showRandomCircles() {
         if (currentRound >= totalRounds) {
             endGame();
             return;
         }
 
         const circles = document.querySelectorAll('.circle');
-        const randomIndex = Math.floor(Math.random() * circles.length);
-        const randomCircle = circles[randomIndex];
-        let circlePosition = getRandomPosition();
-
-        // 원의 위치 설정
-        randomCircle.style.left = circlePosition.x + 'px';
-        randomCircle.style.top = circlePosition.y + 'px';
         
-        randomCircle.style.backgroundColor = 'red';  // 원 색깔을 빨간색으로 변경
-        randomCircle.style.opacity = '1';  // 원을 완전히 보이게 함
+        // 첫 번째 원 표시
+        const randomIndex1 = Math.floor(Math.random() * circles.length);
+        const randomCircle1 = circles[randomIndex1];
+        let circlePosition1 = getRandomPosition();
+        randomCircle1.style.left = circlePosition1.x + 'px';
+        randomCircle1.style.top = circlePosition1.y + 'px';
+        randomCircle1.style.backgroundColor = 'red';  // 빨간색으로 변경
+        randomCircle1.style.opacity = '1';  // 원을 완전히 보이게 함
+
+        // 두 번째 원 표시
+        const randomIndex2 = Math.floor(Math.random() * circles.length);
+        const randomCircle2 = circles[randomIndex2];
+        let circlePosition2 = getRandomPosition();
+        randomCircle2.style.left = circlePosition2.x + 'px';
+        randomCircle2.style.top = circlePosition2.y + 'px';
+        randomCircle2.style.backgroundColor = 'red';  // 빨간색으로 변경
+        randomCircle2.style.opacity = '1';  // 원을 완전히 보이게 함
 
         startTime = Date.now();
-        
+
         // 1초 후 원을 원래대로 돌려놓음
         setTimeout(() => {
-            randomCircle.style.backgroundColor = 'black';  // 원 색깔을 검정색으로 변경
-            randomCircle.style.opacity = '0.7';  // 원을 다시 투명하게
+            randomCircle1.style.opacity = '0.7';  // 원을 다시 투명하게
+            randomCircle2.style.opacity = '0.7';  // 원을 다시 투명하게
             currentRound++;
-            showRandomCircle();  // 다음 원을 나타냄
+            showRandomCircles();  // 다음 원을 나타냄
         }, 1000);
     }
 
@@ -227,34 +234,13 @@
 
         // 기준 시간에 따른 티어 부여 (난이도 2배 어려움)
         let tier = '';
-        if (averageTime <= 0.25) {
+        if (averageTime <= 0.05) {
             tier = 'Grand Master';
-        } else if (averageTime <= 0.3) {
+        } else if (averageTime <= 0.10) {
             tier = 'Master';
-        } else if (averageTime <= 0.4) {
+        } else if (averageTime <= 0.15) {
             tier = 'Diamond';
-        } else if (averageTime <= 0.5) {
+        } else if (averageTime <= 0.20) {
             tier = 'Platinum';
-        } else if (averageTime <= 0.6) {
-            tier = 'Gold';
-        } else if (averageTime <= 0.7) {
-            tier = 'Silver';
-        } else {
-            tier = 'Bronze';
-        }
-
-        // 게임 결과 표시
-        document.getElementById('result').innerHTML = `Your average reaction time: ${averageTime.toFixed(6)}s<br>Your tier: ${tier}`;
-
-        // 다시 도전하기 버튼 표시
-        document.getElementById('backButton').style.display = 'block';
-    }
-
-    // 게임 리스타트 함수
-    function restartGame() {
-        startCountdown();
-    }
-</script>
-
-</body>
-</html>
+        } else if (averageTime <= 0.25) {
+           
