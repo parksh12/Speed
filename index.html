@@ -127,10 +127,17 @@
     let startTime;
     let countdownValue = 5;
     let countdownInterval;
+    let countdownElement = document.getElementById("countdown");
 
+    // 카운트다운 함수
     function startCountdown() {
-        document.getElementById("countdown").style.display = 'block';
-        let countdownElement = document.getElementById("countdown");
+        // 이전 카운트다운이 진행 중이면 멈추기
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+
+        countdownValue = 5;  // 카운트다운을 5초로 초기화
+        countdownElement.style.display = 'block';
 
         countdownInterval = setInterval(function() {
             countdownElement.textContent = countdownValue;
@@ -143,6 +150,7 @@
         }, 1000);
     }
 
+    // 게임 시작 함수
     function startGame() {
         currentRound = 0;
         clickTimes = [];
